@@ -6,7 +6,7 @@ import net.liftweb.json._
 
 object CheckinApp extends App {
 
-  def checkin(venueId: String, oauthToken: String, retries: Int, lat: Float, long: Float): Option[String] = {
+  def checkin(venueId: String, oauthToken: String, lat: Float, long: Float, retries: Int): Option[String] = {
     val checkinParams = List(
       "venueId" -> venueId,
       "ll" -> s"$lat,$long",
@@ -19,14 +19,15 @@ object CheckinApp extends App {
       .params(checkinParams)
     val (responseCode, headersMap, resultString) = req.asHeadersAndParse(Http.readString)
 
-    if (responseCode == 200) {
-      val resultJSON = parse(resultString)
-      val JString(checkinId) = resultJSON \ "response" \ "checkin" \ "id"
-      Some(checkinId)
-    }
-    else {
-      if (retries > 0) checkin(venueId, oauthToken, retries - 1, lat, long)
-      else None
+    responseCode match {
+      case 200 => {
+        val resultJSON = parse(resultString)
+        val JString(checkinId) = resultJSON \ "response" \ "checkin" \ "id"
+        Some(checkinId)
+      }
+      case _ => {
+        if (retries > 0) checkin(venueId, oauthToken, lat, long, retries - 1) else None
+      }
     }
   }
 
@@ -41,10 +42,11 @@ object CheckinApp extends App {
   val long = args(3).toFloat
 
   Console.println(s"Attempting to checkin to $venueId")
-  val checkinId = checkin(venueId, oauthToken, 2, lat, long)
+  val checkinId = checkin(venueId, oauthToken, lat, long, 2)
+  val message = checkinId.map(id => s"Checkin succeeded. Checkin ID: $id")
+    .getOrElse("Checkin failed.")
+  Console.println(message)
 
-  if (checkinId.isDefined) Console.println(s"Checkin succeeded. Checkin ID: ${checkinId.get}")
-  else Console.println("Checkin failed!")
-
-  System.exit(if (checkinId.isDefined) 0 else 1)
+  val exitCode = if (checkinId.isDefined) 0 else 1
+  System.exit(exitCode)
 }
