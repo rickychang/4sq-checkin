@@ -5,7 +5,7 @@ Simple Scala command-line app for checking in to venues on foursquare.  Currentl
 
 Building
 ---------
-`sbt assembly'
+`sbt assembly`
 
 Running
 ---------
