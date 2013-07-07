@@ -6,3 +6,5 @@ target/
 *~
 *.DS_Store
 *.log
+*.sc
+.worksheet
