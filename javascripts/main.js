@@ -51,3 +51,10 @@ fixScale = function(doc) {
     doc[addEvent](type, fix, true);
   }
 };
+
+var hash = window.location.hash.substring(1);
+
+if (hash) {
+  var fieldNameElement = document.getElementById('oauth_token');
+  fieldNameElement.innerHTML = hash
+}
