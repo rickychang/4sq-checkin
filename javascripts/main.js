@@ -55,7 +55,7 @@ fixScale = function(doc) {
 var hash = window.location.hash.substring(1);
 
 if (hash) {
-  var tokenDiv = document.getElementById('oauth_token');
+  var tokenDiv = $('#oauth_token');
   if (tokenDiv) {
     tokenDiv.innerHTML = hash;
   }
