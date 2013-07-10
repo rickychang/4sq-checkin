@@ -55,6 +55,8 @@ fixScale = function(doc) {
 var hash = window.location.hash.substring(1);
 
 if (hash) {
-  var fieldNameElement = document.getElementById('oauth_token');
-  fieldNameElement.innerHTML = hash
+  var tokenDiv = document.getElementById('oauth_token');
+  if (tokenDiv) {
+    tokenDiv.innerHTML = hash;
+  }
 }
