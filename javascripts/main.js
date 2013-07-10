@@ -32,11 +32,11 @@ $(document).ready(function(){
   $('img').load(sectionHeight);
   
   var hash = window.location.hash.substring(1);
-
   if (hash) {
     var tokenDiv = $('#oauth_token');
     if (tokenDiv) {
-      tokenDiv.innerHTML = hash;
+      var token = hash.split('=')[1]
+      tokenDiv.html("Here's your OAuth Token: <strong>" + token + "</strong>.");
     }
   }
 });
